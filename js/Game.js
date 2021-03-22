@@ -61,34 +61,60 @@ class Game {
         index = index + 1 ;
 
         //position the cars a little away from each other in x direction
-        x = x + 200;
-        //use data form the database to display the cars in y direction
-        y = displayHeight - allPlayers[plr].distance;
-        cars[index-1].x = x;
-        cars[index-1].y = y;
-
-        if (index === player.index){
-          cars[index - 1].shapeColor = "red";
-          camera.position.x = displayWidth/2;
-          camera.position.y = cars[index-1].y
+        x = 200 + (index * 200) + allPlayers[plr].xPos;
+        //player1= 200 +1*200+ 0=400
+        //player2=200+ 2*200 +0=600
+        y = displayHeight - allPlayers[plr].distance ;
+                //position the cars a little away from each other in x direction
+               // x = x + 200;
+                //use data form the database to display the cars in y direction
+              // y = displayHeight - allPlayers[plr].distance;
+                cars[index-1].x = x;
+                cars[index-1].y = y;
+                textAlign(CENTER);
+                textSize(20);
+                text(allPlayers[plr].name, cars[index - 1].x, cars[index - 1].y + 75);
+                if (index === player.index){
+                  cars[index - 1].shapeColor = "red";
+                  camera.position.x = displayWidth/2;
+                  camera.position.y = cars[index-1].y
+                }
+               
+              }
+        
+            }
+        
+            
+            if(player.distance < 2150){
+              if(keyIsDown(38) && player.index !== null){
+                  yVel += 0.9;
+                  if(keyIsDown(37)){
+                      xVel -= 0.2;
+                  }
+                  if(keyIsDown(39)){
+                      xVel += 0.2;
+                  }
+              }
+              else if(keyIsDown(38) && yVel > 0 && player.index !== null){
+                  yVel -= 0.1;
+                  xVel *= 0.9;
+              }
+              else{
+                  yVel *= 0.985;
+                  xVel *= 0.985;
+              }
+            }
+        
+          //move the car
+          player.distance += yVel;
+          yVel *= 0.985;
+          player.xPos += xVel;
+          xVel *= 0.985;
+          player.update();
+          //display sprites
+          drawSprites();
         }
-       
-        //textSize(15);
-        //text(allPlayers[plr].name + ": " + allPlayers[plr].distance, 120,display_position)
-      }
-
-    }
-
-    if(keyIsDown(UP_ARROW) && player.index !== null){
-      player.distance +=10
-      player.update();
-    }
-    if(player.distance > 3860){
-      gameState = 2;
-    }
-   
-    drawSprites();
-  }
+          
 
   end(){
     console.log("Game Ended");
